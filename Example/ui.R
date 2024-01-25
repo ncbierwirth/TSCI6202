@@ -18,8 +18,9 @@ fluidPage(
     # Sidebar with a slider input for number of bins
     sidebarLayout(
         sidebarPanel(
-            actionButton('debug', 'Click Here for Debug'),
-            sliderInput("bins",
+          selectizeInput("InputDataset","Select Dataset",unique(MetaData$Label)),
+          actionButton('debug', 'Click Here for Debug'),
+          sliderInput("bins",
                         "Number of bins:",
                         min = 1,
                         max = 50,

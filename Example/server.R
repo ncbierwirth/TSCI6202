@@ -30,3 +30,13 @@ function(input, output, session) {
     observe(if(input$debug > 0){browser()})
 
 }
+
+# subset(MetaData, Label==input$InputDataset)
+# foo<-new.env()
+# PackageVariable<-unique(testdata$Package)
+# ItemVariable<-unique(testdata$Item)
+# data(list = ItemVariable, package = PackageVariable, envir = foo)
+# attach(foo)
+# ggplot(data=cancer, aes(x=age, y=meal.cal)) + geom_point()
+
+
