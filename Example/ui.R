@@ -19,6 +19,8 @@ fluidPage(
     sidebarLayout(
         sidebarPanel(
           selectizeInput("InputDataset","Select Dataset",unique(MetaData$Label)),
+          uiOutput("XvarMenu"),
+          uiOutput("YvarMenu"),
           actionButton('debug', 'Click Here for Debug'),
           sliderInput("bins",
                         "Number of bins:",

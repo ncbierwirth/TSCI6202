@@ -27,6 +27,14 @@ function(input, output, session) {
 
     });
 
+    rv <- reactiveValues()
+
+    observe(rv$selected.dataset <- subset(MetaData, Label == input$InputDataset))
+
+    output$XvarMenu <- renderUI(selectizeInput("InputXvar","Selected X Variable",unique(rv$selected.dataset$Column)))
+
+    output$YvarMenu <- renderUI(selectizeInput("InputYvar","Selected Y Variable",unique(rv$selected.dataset$Column)))
+
     observe(if(input$debug > 0){browser()})
 
 }

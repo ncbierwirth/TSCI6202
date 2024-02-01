@@ -1,5 +1,12 @@
 library(dplyr)
 library(shiny)
+library(rio)
+
+exclude.formats <- c("list", "haven_labelled",
+                         "haven_labelled_spss,haven_labelled",
+                         "sfc_MULTIPOLYGON,sfc", "matrix,array",
+                         "nativeRaster","wk_wkb,wk_vctr",
+                         "wk_wkb,wk_vctr,geovctr")
 
 data.sets <- data(package = .packages(all.available = TRUE))$results%>%
   as.data.frame() %>%
@@ -18,16 +25,28 @@ datainfo <- data.sets$code %>% sapply(parseeval, simplify = FALSE) %>% lapply(da
 
 xx <- data.sets[1:30,]
 
-MetaData <- mapply(function(CurrentItem,CurrentPackage){
-  currentenv <- new.env()
-  data(list = CurrentItem, package = CurrentPackage, envir = currentenv)
-  currentdf <- try(as.data.frame(currentenv[[CurrentItem]]))
-  if(is(currentdf, "try-error")) return()
-  out <- dataframesmry(currentdf) %>%
-    mutate(Item=CurrentItem, Package=CurrentPackage, Rows=nrow(currentdf))
-  if(nrow(out)>0) out
-  },
-  data.sets$Item, data.sets$Package, SIMPLIFY = FALSE) %>% bind_rows() %>%
-  group_by(Item,Package) %>%
-  mutate(Label = sprintf("%s, %s, [%d , %d]",Item,Package,Rows,n()))
+if(file.exists("metadata.csv")) {MetaData <- import("metadata.csv")} else {
+  MetaData <- mapply(function(CurrentItem,CurrentPackage){
+    currentenv <- new.env()
+    data(list = CurrentItem, package = CurrentPackage, envir = currentenv)
+    currentdf <- try(as.data.frame(currentenv[[CurrentItem]]))
+    if(is(currentdf, "try-error")) return()
+    out <- dataframesmry(currentdf) %>%
+      mutate(Item=CurrentItem, Package=CurrentPackage, Rows=nrow(currentdf))
+    if(nrow(out)==0) return()
+    out <- subset(out, !class.type %in% exclude.formats)
+    if(nrow(out)>0) out
+    },
+    data.sets$Item, data.sets$Package, SIMPLIFY = FALSE) %>% bind_rows() %>%
+    group_by(Item,Package) %>%
+    mutate(Label = sprintf("%s, %s, [%d , %d]",Item,Package,Rows,n()))
+  export(MetaData, "metadata.csv")
+}
+
+input <- list(InputDataset="starwars, dplyr, [87 , 11]")
+
+#sprintf('as.data.frame(%s::%s) %>% ggplot(aes(x=height, y=mass)) + geom_point()',
+#        selected.dataset$Package[1],selected.dataset$Item[1])%>%
+#  parse(text = .) %>% eval()
+
 
