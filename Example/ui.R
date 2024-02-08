@@ -24,6 +24,8 @@ fluidPage(
           uiOutput("ColorVarMenu"),
           uiOutput("SizeVarMenu"),
           uiOutput("AlphaVarMenu"),
+          uiOutput("Facet1VarMenu"),
+          uiOutput("Facet2VarMenu"),
           actionButton('update', 'Update'),
           actionButton('debug', 'Click Here for Debug'),
           # sliderInput("bins",

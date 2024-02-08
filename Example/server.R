@@ -37,20 +37,28 @@ function(input, output, session) {
     output$ColorVarMenu <- renderUI(selectizeInput("InputColorVar","Selected Variable Color ",c("NULL", unique(rv$selected.dataset$Column))))
     output$SizeVarMenu <- renderUI(selectizeInput("InputSizeVar","Selected Variable Size",c("NULL", unique(rv$selected.dataset$Column))))
     output$AlphaVarMenu <- renderUI(selectizeInput("InputAlphaVar","Selected Variable Alpha",c("NULL", unique(rv$selected.dataset$Column))))
+    output$Facet1VarMenu <- renderUI(selectizeInput("Facet1Var","Selected Variable Facet, 1 Column",c("NULL", subset(rv$selected.dataset, unique<7)$Column)))
+    output$Facet2VarMenu <- renderUI(selectizeInput("Facet2Var","Selected Variable Facet, 2 Column",c("NULL", subset(rv$selected.dataset, unique<7)$Column)))
+
 
     #create plot command
     observe({
-      input$update;
+      input$update
+      facet1 <- isolate(input$Facet1Var)
+      facet2 <- isolate(input$Facet2Var)
+      case_when(facet1=="NULL"&facet2=="NULL"~"",
+                facet1==facet2~sprintf("+facet_grid('%s')",facet1))
       isolate(
         rv$plotcommand <- sprintf(
-          'as.data.frame(%s::%s) %%>%% ggplot(aes(x=%s, y=%s, color=%s, size=%s, alpha=%s))+geom_point()',
+          'as.data.frame(%s::%s) %%>%% ggplot(aet@s(x=%s, y=%s, color=%s, size=%s, alpha=%s))+geom_point()',
           rv$selected.dataset$Package[1],
           rv$selected.dataset$Item[1],
           input$InputXvar,
           input$InputYvar,
           input$InputColorVar,
           input$InputSizeVar,
-          input$InputAlphaVar))
+          input$InputAlphaVar
+          ))
     })
 
     output$plotoutput<-renderPlot(rv$plotcommand %>% parse(text=.) %>% eval())
