@@ -13,7 +13,7 @@ library(shiny)
 fluidPage(
 
     # Application title
-    titlePanel("Old Faithful Geyser Data"),
+    titlePanel("Dataset Visualization"),
 
     # Sidebar with a slider input for number of bins
     sidebarLayout(
@@ -21,17 +21,22 @@ fluidPage(
           selectizeInput("InputDataset","Select Dataset",unique(MetaData$Label)),
           uiOutput("XvarMenu"),
           uiOutput("YvarMenu"),
+          uiOutput("ColorVarMenu"),
+          uiOutput("SizeVarMenu"),
+          uiOutput("AlphaVarMenu"),
+          actionButton('update', 'Update'),
           actionButton('debug', 'Click Here for Debug'),
-          sliderInput("bins",
-                        "Number of bins:",
-                        min = 1,
-                        max = 50,
-                        value = 30)
+          # sliderInput("bins",
+          #               "Number of bins:",
+          #               min = 1,
+          #               max = 50,
+          #               value = 30)
         ),
 
         # Show a plot of the generated distribution
         mainPanel(
-            plotOutput("distPlot")
+            plotOutput("plotoutput"),
+            textOutput("plotcommand")
         )
     )
 )

@@ -31,12 +31,32 @@ function(input, output, session) {
 
     observe(rv$selected.dataset <- subset(MetaData, Label == input$InputDataset))
 
+    #generate dynamic menus
     output$XvarMenu <- renderUI(selectizeInput("InputXvar","Selected X Variable",unique(rv$selected.dataset$Column)))
-
     output$YvarMenu <- renderUI(selectizeInput("InputYvar","Selected Y Variable",unique(rv$selected.dataset$Column)))
+    output$ColorVarMenu <- renderUI(selectizeInput("InputColorVar","Selected Variable Color ",c("NULL", unique(rv$selected.dataset$Column))))
+    output$SizeVarMenu <- renderUI(selectizeInput("InputSizeVar","Selected Variable Size",c("NULL", unique(rv$selected.dataset$Column))))
+    output$AlphaVarMenu <- renderUI(selectizeInput("InputAlphaVar","Selected Variable Alpha",c("NULL", unique(rv$selected.dataset$Column))))
+
+    #create plot command
+    observe({
+      input$update;
+      isolate(
+        rv$plotcommand <- sprintf(
+          'as.data.frame(%s::%s) %%>%% ggplot(aes(x=%s, y=%s, color=%s, size=%s, alpha=%s))+geom_point()',
+          rv$selected.dataset$Package[1],
+          rv$selected.dataset$Item[1],
+          input$InputXvar,
+          input$InputYvar,
+          input$InputColorVar,
+          input$InputSizeVar,
+          input$InputAlphaVar))
+    })
+
+    output$plotoutput<-renderPlot(rv$plotcommand %>% parse(text=.) %>% eval())
+    output$plotcommand<-renderText(rv$plotcommand)
 
     observe(if(input$debug > 0){browser()})
-
 }
 
 # subset(MetaData, Label==input$InputDataset)
