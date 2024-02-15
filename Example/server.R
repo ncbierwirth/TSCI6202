@@ -46,11 +46,16 @@ function(input, output, session) {
       input$update
       facet1 <- isolate(input$Facet1Var)
       facet2 <- isolate(input$Facet2Var)
-      case_when(facet1=="NULL"&facet2=="NULL"~"",
-                facet1==facet2~sprintf("+facet_grid('%s')",facet1))
+      facetcode <- case_when(facet1=="NULL"&facet2=="NULL"~"",
+                facet1==facet2~sprintf("+facet_wrap(vars(%s))",facet1),
+                facet1=="NULL"~sprintf("+facet_wrap(rows=NA,cols=vars(%s))",facet2),
+                facet2=="NULL"~sprintf("+facet_grid(rows=vars(%s), cols=NA)",facet1),
+                facet1!="NULL"&facet2!="NULL"~sprintf("+facet_grid(rows=vars(%s), cols=vars(%s))",facet1,facet2),
+                TRUE~"Oops!"
+                )
       isolate(
         rv$plotcommand <- sprintf(
-          'as.data.frame(%s::%s) %%>%% ggplot(aet@s(x=%s, y=%s, color=%s, size=%s, alpha=%s))+geom_point()',
+          'as.data.frame(%s::%s) %%>%% ggplot(aes(x=%s, y=%s, color=%s, size=%s, alpha=%s))+geom_point()',
           rv$selected.dataset$Package[1],
           rv$selected.dataset$Item[1],
           input$InputXvar,
@@ -58,7 +63,8 @@ function(input, output, session) {
           input$InputColorVar,
           input$InputSizeVar,
           input$InputAlphaVar
-          ))
+#combining basic plot command with facetcode from above
+          ) %>% paste(facetcode))
     })
 
     output$plotoutput<-renderPlot(rv$plotcommand %>% parse(text=.) %>% eval())
