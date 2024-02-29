@@ -2,6 +2,23 @@ library(dplyr)
 library(shiny)
 library(rio)
 
+if(file.exists("functions.R")) source("functions.R")
+
+AESsummary<-summarize_ggfunctions(payload = sggf_listAES)
+
+# `geom_ribbon()` requires the following missing aesthetics: ymin and ymax or xmin and xmax
+# `geom_curve()` requires the following missing aesthetics: xend and yend
+# `geom_label()` requires the following missing aesthetics: label
+
+# Aesthetic mappings that at least one geom_* function requires
+ggCoreAes <- c('x','xmax','xmin','y','ymax','ymin','angle','intercept','label',
+               'lower','middle','radius','slope','upper','xend','xintercept',
+               'xlower','xmiddle','xupper','yend','yintercept')
+# Aesthetic mappings that at least one geom_* function can use
+ggOtherAes <- c('colour','fill','linetype','linewidth','shape','size','alpha');
+
+ggAllAES <- c(ggCoreAes, ggOtherAes)
+
 exclude.formats <- c("list", "haven_labelled",
                          "haven_labelled_spss,haven_labelled",
                          "sfc_MULTIPOLYGON,sfc", "matrix,array",

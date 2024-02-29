@@ -1,0 +1,4 @@
+.col-sm-4 {
+    overflow-y: scroll;
+    height: 50vh;
+}

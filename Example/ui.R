@@ -9,33 +9,54 @@
 
 library(shiny)
 
-# Define UI for application that draws a histogram
 fluidPage(
 
     # Application title
     titlePanel("Dataset Visualization"),
 
-    # Sidebar with a slider input for number of bins
     sidebarLayout(
         sidebarPanel(
           selectizeInput("InputDataset","Select Dataset",unique(MetaData$Label)),
+          selectizeInput("ggplotLayers","Select Layer (a ggplot geom function)",names(AESsummary), selected = "geom_point", multiple=TRUE),
           uiOutput("XvarMenu"),
           uiOutput("YvarMenu"),
+          uiOutput("ZvarMenu"),
           uiOutput("ColorVarMenu"),
           uiOutput("SizeVarMenu"),
           uiOutput("AlphaVarMenu"),
           uiOutput("Facet1VarMenu"),
           uiOutput("Facet2VarMenu"),
+          uiOutput('x_menu'),
+          uiOutput('xmax_menu'),
+          uiOutput('xmin_menu'),
+          uiOutput('y_menu'),
+          uiOutput('ymax_menu'),
+          uiOutput('ymin_menu'),
+          uiOutput('angle_menu'),
+          uiOutput('intercept_menu'),
+          uiOutput('label_menu'),
+          uiOutput('lower_menu'),
+          uiOutput('middle_menu'),
+          uiOutput('radius_menu'),
+          uiOutput('slope_menu'),
+          uiOutput('upper_menu'),
+          uiOutput('xend_menu'),
+          uiOutput('xintercept_menu'),
+          uiOutput('xlower_menu'),
+          uiOutput('xmiddle_menu'),
+          uiOutput('xupper_menu'),
+          uiOutput('yend_menu'),
+          uiOutput('yintercept_menu'),
+          uiOutput('colour_menu'),
+          uiOutput('fill_menu'),
+          uiOutput('linetype_menu'),
+          uiOutput('linewidth_menu'),
+          uiOutput('shape_menu'),
+          uiOutput('size_menu'),
+          uiOutput('alpha_menu'),
           actionButton('update', 'Update'),
-          actionButton('debug', 'Click Here for Debug'),
-          # sliderInput("bins",
-          #               "Number of bins:",
-          #               min = 1,
-          #               max = 50,
-          #               value = 30)
+          actionButton('debug', 'Click Here for Debug')
         ),
-
-        # Show a plot of the generated distribution
         mainPanel(
             plotOutput("plotoutput"),
             textOutput("plotcommand")

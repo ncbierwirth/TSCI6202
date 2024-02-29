@@ -13,20 +13,6 @@ library(shiny)
 # Define server logic required to draw a histogram
 function(input, output, session) {
 
-    output$distPlot <- renderPlot({
-
-        # generate bins based on input$bins from ui.R
-        # x    <- faithful[, 2]
-        # bins <- seq(min(x), max(x), length.out = input$bins + 1)
-
-        # draw the histogram with the specified number of bins
-        # hist(x, breaks = bins, col = 'darkgray', border = 'white',
-        #      xlab = 'Waiting time to next eruption (in mins)',
-        #      main = 'Histogram of waiting times')
-        ggplot(faithful, aes(x=waiting)) + geom_histogram(bins = input$bins)
-
-    });
-
     rv <- reactiveValues()
 
     observe(rv$selected.dataset <- subset(MetaData, Label == input$InputDataset))
@@ -34,12 +20,40 @@ function(input, output, session) {
     #generate dynamic menus
     output$XvarMenu <- renderUI(selectizeInput("InputXvar","Selected X Variable",unique(rv$selected.dataset$Column)))
     output$YvarMenu <- renderUI(selectizeInput("InputYvar","Selected Y Variable",unique(rv$selected.dataset$Column)))
+    output$ZvarMenu <- renderUI(selectizeInput("InputZvar","Selected Z Variable",unique(rv$selected.dataset$Column)))
     output$ColorVarMenu <- renderUI(selectizeInput("InputColorVar","Selected Variable Color ",c("NULL", unique(rv$selected.dataset$Column))))
     output$SizeVarMenu <- renderUI(selectizeInput("InputSizeVar","Selected Variable Size",c("NULL", unique(rv$selected.dataset$Column))))
     output$AlphaVarMenu <- renderUI(selectizeInput("InputAlphaVar","Selected Variable Alpha",c("NULL", unique(rv$selected.dataset$Column))))
     output$Facet1VarMenu <- renderUI(selectizeInput("Facet1Var","Selected Variable Facet, 1 Column",c("NULL", subset(rv$selected.dataset, unique<7)$Column)))
     output$Facet2VarMenu <- renderUI(selectizeInput("Facet2Var","Selected Variable Facet, 2 Column",c("NULL", subset(rv$selected.dataset, unique<7)$Column)))
-
+    output$x_menu <- renderUI(selectizeInput('x_var', 'Select x variable', c('NULL', unique(rv$selected.dataset$Column))))
+    output$xmax_menu <- renderUI(selectizeInput('xmax_var', 'Select xmax variable', c('NULL', unique(rv$selected.dataset$Column))))
+    output$xmin_menu <- renderUI(selectizeInput('xmin_var', 'Select xmin variable', c('NULL', unique(rv$selected.dataset$Column))))
+    output$y_menu <- renderUI(selectizeInput('y_var', 'Select y variable', c('NULL', unique(rv$selected.dataset$Column))))
+    output$ymax_menu <- renderUI(selectizeInput('ymax_var', 'Select ymax variable', c('NULL', unique(rv$selected.dataset$Column))))
+    output$ymin_menu <- renderUI(selectizeInput('ymin_var', 'Select ymin variable', c('NULL', unique(rv$selected.dataset$Column))))
+    output$angle_menu <- renderUI(selectizeInput('angle_var', 'Select angle variable', c('NULL', unique(rv$selected.dataset$Column))))
+    output$intercept_menu <- renderUI(selectizeInput('intercept_var', 'Select intercept variable', c('NULL', unique(rv$selected.dataset$Column))))
+    output$label_menu <- renderUI(selectizeInput('label_var', 'Select label variable', c('NULL', unique(rv$selected.dataset$Column))))
+    output$lower_menu <- renderUI(selectizeInput('lower_var', 'Select lower variable', c('NULL', unique(rv$selected.dataset$Column))))
+    output$middle_menu <- renderUI(selectizeInput('middle_var', 'Select middle variable', c('NULL', unique(rv$selected.dataset$Column))))
+    output$radius_menu <- renderUI(selectizeInput('radius_var', 'Select radius variable', c('NULL', unique(rv$selected.dataset$Column))))
+    output$slope_menu <- renderUI(selectizeInput('slope_var', 'Select slope variable', c('NULL', unique(rv$selected.dataset$Column))))
+    output$upper_menu <- renderUI(selectizeInput('upper_var', 'Select upper variable', c('NULL', unique(rv$selected.dataset$Column))))
+    output$xend_menu <- renderUI(selectizeInput('xend_var', 'Select xend variable', c('NULL', unique(rv$selected.dataset$Column))))
+    output$xintercept_menu <- renderUI(selectizeInput('xintercept_var', 'Select xintercept variable', c('NULL', unique(rv$selected.dataset$Column))))
+    output$xlower_menu <- renderUI(selectizeInput('xlower_var', 'Select xlower variable', c('NULL', unique(rv$selected.dataset$Column))))
+    output$xmiddle_menu <- renderUI(selectizeInput('xmiddle_var', 'Select xmiddle variable', c('NULL', unique(rv$selected.dataset$Column))))
+    output$xupper_menu <- renderUI(selectizeInput('xupper_var', 'Select xupper variable', c('NULL', unique(rv$selected.dataset$Column))))
+    output$yend_menu <- renderUI(selectizeInput('yend_var', 'Select yend variable', c('NULL', unique(rv$selected.dataset$Column))))
+    output$yintercept_menu <- renderUI(selectizeInput('yintercept_var', 'Select yintercept variable', c('NULL', unique(rv$selected.dataset$Column))))
+    output$colour_menu <- renderUI(selectizeInput('colour_var', 'Select colour variable', c('NULL', unique(rv$selected.dataset$Column))))
+    output$fill_menu <- renderUI(selectizeInput('fill_var', 'Select fill variable', c('NULL', unique(rv$selected.dataset$Column))))
+    output$linetype_menu <- renderUI(selectizeInput('linetype_var', 'Select linetype variable', c('NULL', unique(rv$selected.dataset$Column))))
+    output$linewidth_menu <- renderUI(selectizeInput('linewidth_var', 'Select linewidth variable', c('NULL', unique(rv$selected.dataset$Column))))
+    output$shape_menu <- renderUI(selectizeInput('shape_var', 'Select shape variable', c('NULL', unique(rv$selected.dataset$Column))))
+    output$size_menu <- renderUI(selectizeInput('size_var', 'Select size variable', c('NULL', unique(rv$selected.dataset$Column))))
+    output$alpha_menu <- renderUI(selectizeInput('alpha_var', 'Select alpha variable', c('NULL', unique(rv$selected.dataset$Column))))
 
     #create plot command
     observe({
@@ -53,18 +67,27 @@ function(input, output, session) {
                 facet1!="NULL"&facet2!="NULL"~sprintf("+facet_grid(rows=vars(%s), cols=vars(%s))",facet1,facet2),
                 TRUE~"Oops!"
                 )
+
+      AESargs <- reactiveValuesToList(input) [paste0(ggAllAES,"_var")] %>%
+        unlist() %>%
+        {.[.!="NULL"]} %>%
+        paste0(gsub("_var","",names(.)),"=",.,collapse=",")
+
+      # AESargs  <- reactiveValuesToList(input) [paste0(ggAllAES,"_var")] %>%
+      #   unlist()
+      # AESargs <- AESargs[AESargs!="NULL"]
+      # AESargs <- paste0(gsub("_var","",names(AESargs)),"=",AESargs,collapse=",")
+
       isolate(
-        rv$plotcommand <- sprintf(
-          'as.data.frame(%s::%s) %%>%% ggplot(aes(x=%s, y=%s, color=%s, size=%s, alpha=%s))+geom_point()',
+        rv$plotcommand <-
+        sprintf(
+          'as.data.frame(%s::%s) %%>%% ggplot(aes(%s))+%s',
           rv$selected.dataset$Package[1],
           rv$selected.dataset$Item[1],
-          input$InputXvar,
-          input$InputYvar,
-          input$InputColorVar,
-          input$InputSizeVar,
-          input$InputAlphaVar
-#combining basic plot command with facetcode from above
-          ) %>% paste(facetcode))
+          AESargs,
+          paste0(input$ggplotLayers, "()", collapse = "+")
+          #combining basic plot command with facetcode from above
+        ) %>% paste(facetcode))
     })
 
     output$plotoutput<-renderPlot(rv$plotcommand %>% parse(text=.) %>% eval())
@@ -72,13 +95,4 @@ function(input, output, session) {
 
     observe(if(input$debug > 0){browser()})
 }
-
-# subset(MetaData, Label==input$InputDataset)
-# foo<-new.env()
-# PackageVariable<-unique(testdata$Package)
-# ItemVariable<-unique(testdata$Item)
-# data(list = ItemVariable, package = PackageVariable, envir = foo)
-# attach(foo)
-# ggplot(data=cancer, aes(x=age, y=meal.cal)) + geom_point()
-
 
