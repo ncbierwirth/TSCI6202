@@ -1,6 +1,7 @@
 library(dplyr)
 library(shiny)
 library(rio)
+library(ggplot2)
 
 if(file.exists("functions.R")) source("functions.R")
 

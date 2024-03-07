@@ -7,7 +7,6 @@
 #    http://shiny.rstudio.com/
 #
 
-library(ggplot2)
 library(shiny)
 
 # Define server logic required to draw a histogram

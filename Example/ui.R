@@ -10,6 +10,7 @@
 library(shiny)
 
 fluidPage(
+  tags$head(tags$link(rel="stylesheet", type="text/css", href="dashboard.css")),
 
     # Application title
     titlePanel("Dataset Visualization"),
