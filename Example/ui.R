@@ -54,11 +54,11 @@ fluidPage(
           uiOutput('linewidth_menu'),
           uiOutput('shape_menu'),
           uiOutput('size_menu'),
-          uiOutput('alpha_menu'),
-          actionButton('update', 'Update'),
-          actionButton('debug', 'Click Here for Debug')
+          uiOutput('alpha_menu')
         ),
         mainPanel(
+          actionButton('update', 'Update'),
+          actionButton('debug', 'Click Here for Debug'),
             plotOutput("plotoutput"),
             textOutput("plotcommand")
         )

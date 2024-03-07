@@ -1,4 +1,10 @@
 .col-sm-4 {
     overflow-y: scroll;
-    height: 50vh;
+    height: 80vh;
 }
+
+/* div { color : red; height: 50vh } /* applies to every div class*/
+div.myclass { color : red; height: 50vh } /* applies to divs who's class is myclass */
+.myclass { color : red; height: 50vh } /*applies to everything with class of myclass */
+div#myuniqueid { color : red; height: 50vh } /* applies to div with id of myuniqueid */
+#myuniqueid { color : red; height: 50vh } /* applies to specific div "omitted" with id of "myuniqueid" */
