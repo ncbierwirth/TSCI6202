@@ -8,9 +8,14 @@
 #
 
 library(shiny)
+library(shinydashboard)
+library(shinyWidgets)
+library(shinyjs)
+
 
 fluidPage(
   tags$head(tags$link(rel="stylesheet", type="text/css", href="dashboard.css")),
+  useShinydashboard(), useShinyjs(),
 
     # Application title
     titlePanel("Dataset Visualization"),
@@ -28,11 +33,20 @@ fluidPage(
           uiOutput("Facet1VarMenu"),
           uiOutput("Facet2VarMenu"),
           uiOutput('x_menu'),
+          box(title='additional X variables',width=NULL,collapsible=T,collapsed=T,
           uiOutput('xmax_menu'),
           uiOutput('xmin_menu'),
+          uiOutput('xend_menu'),
+          uiOutput('xintercept_menu'),
+          uiOutput('xlower_menu'),
+          uiOutput('xmiddle_menu'),
+          uiOutput('xupper_menu')),
           uiOutput('y_menu'),
+          box(title='additional X variables',width=NULL,collapsible=T,collapsed=T,
           uiOutput('ymax_menu'),
           uiOutput('ymin_menu'),
+          uiOutput('yend_menu'),
+          uiOutput('yintercept_menu')),
           uiOutput('angle_menu'),
           uiOutput('intercept_menu'),
           uiOutput('label_menu'),
@@ -41,13 +55,6 @@ fluidPage(
           uiOutput('radius_menu'),
           uiOutput('slope_menu'),
           uiOutput('upper_menu'),
-          uiOutput('xend_menu'),
-          uiOutput('xintercept_menu'),
-          uiOutput('xlower_menu'),
-          uiOutput('xmiddle_menu'),
-          uiOutput('xupper_menu'),
-          uiOutput('yend_menu'),
-          uiOutput('yintercept_menu'),
           uiOutput('colour_menu'),
           uiOutput('fill_menu'),
           uiOutput('linetype_menu'),

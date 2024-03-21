@@ -3,6 +3,24 @@
     height: 80vh;
 }
 
+.shiny-input-container {
+  display: flex;
+  align-items: right
+  gap: 20px; /* Adjust space between label and input as needed */
+}
+
+.shiny-input-container > label {
+  margin-bottom: 0; /* Removes the default bottom margin from labels */
+}
+
+.form-group.shiny-input-container {
+    margin:5px;
+}
+
+.selectize-control.shiny-input-select {
+  margin:0
+}
+
 /* div { color : red; height: 50vh } /* applies to every div class*/
 div.myclass { color : red; height: 50vh } /* applies to divs who's class is myclass */
 .myclass { color : red; height: 50vh } /*applies to everything with class of myclass */
