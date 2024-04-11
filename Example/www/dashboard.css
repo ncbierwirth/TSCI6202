@@ -5,11 +5,14 @@
 
 .shiny-input-container {
   display: flex;
-  align-items: right
+  min-width: 40em !important;
+  width: 440em !important;
   gap: 20px; /* Adjust space between label and input as needed */
 }
 
 .shiny-input-container > label {
+  width: 15em ;
+  text-align: right;
   margin-bottom: 0; /* Removes the default bottom margin from labels */
 }
 
@@ -20,6 +23,22 @@
 .selectize-control.shiny-input-select {
   margin:0
 }
+
+.selectize-input.items {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.box {
+  width: 30em;
+}
+
+.selectize-input.items>.item ,.selectize-input.items>.input {
+  padding-top: 0;
+  padding-bottom: 0;
+  min-width: 10em;
+  line-height: 30px;
+ }
 
 /* div { color : red; height: 50vh } /* applies to every div class*/
 div.myclass { color : red; height: 50vh } /* applies to divs who's class is myclass */

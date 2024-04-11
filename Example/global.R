@@ -13,7 +13,6 @@ AESsummary<-summarize_ggfunctions(payload = sggf_listAES)
 
 # Aesthetic mappings that at least one geom_* function requires
 ggCoreAes <-
-
   sapply(AESsummary, function(xx) xx$required) %>% unlist() %>%
   strsplit(split ="|", fixed=TRUE) %>% unlist() %>% table() %>%
   sort(dec=TRUE) %>% names()
@@ -27,11 +26,24 @@ ggOtherAes <-
 
   sapply(AESsummary, function(xx) xx$other) %>% unlist() %>%
   strsplit(split ="|", fixed=TRUE) %>% unlist() %>% table() %>%
-  sort(dec=TRUE) %>% names() %>% setdiff(ggCoreAes) %>% c("alpha")
+  sort(dec=TRUE) %>% names() %>% setdiff(ggCoreAes) %>% c("alpha","group")
 
   # c('colour','fill','linetype','linewidth','shape','size','alpha');
 
 ggAllAES <- c(ggCoreAes, ggOtherAes)
+
+ggYAes <- grep("^y",ggAllAES,value = TRUE) %>% setdiff("y")
+ggXAes <- grep("^x",ggAllAES,value = TRUE) %>% setdiff("x")
+
+#ggPopularAes<-intersect(ggAllAES,c('colour','fill','linetype','linewidth','shape','size','alpha','group'))
+
+ggUncommonAes<-setdiff(ggAllAES,c(ggOtherAes,ggXAes,ggYAes,"x","y"))
+
+ggNumericAes <- intersect(c(ggYAes,ggYAes,'radius','slope','intercept','angle'),ggAllAES);
+
+AesIDs<-paste0(ggAllAES,"_var")
+
+AesLabels<-sprintf("Select %s variable",ggAllAES)
 
 exclude.formats <- c("list", "haven_labelled",
                          "haven_labelled_spss,haven_labelled",
