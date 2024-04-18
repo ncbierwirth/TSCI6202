@@ -11,6 +11,7 @@ library(shiny)
 library(shinydashboard)
 library(shinyWidgets)
 library(shinyjs)
+library(hexbin)
 
 
 fluidPage(

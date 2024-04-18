@@ -23,10 +23,9 @@ ggCoreAes <-
 
 # Aesthetic mappings that at least one geom_* function can use
 ggOtherAes <-
-
   sapply(AESsummary, function(xx) xx$other) %>% unlist() %>%
   strsplit(split ="|", fixed=TRUE) %>% unlist() %>% table() %>%
-  sort(dec=TRUE) %>% names() %>% setdiff(ggCoreAes) %>% c("alpha","group")
+  sort(dec=TRUE) %>% names() %>% setdiff(ggCoreAes) %>% c("alpha","group","z")
 
   # c('colour','fill','linetype','linewidth','shape','size','alpha');
 
